@@ -72,13 +72,17 @@ int InputDialog::exec() {
   return QDialog::exec();
 }
 
+void InputDialog::show(){
+  setMainWindow(this);
+}
+
 void InputDialog::handleInput(QString s) {
   if (!QString::compare(s,"⌫")) {
     line->backspace();
   }
 
   if (!QString::compare(s,"⏎")) {
-    if (line->text().length() > minLength){
+    if (line->text().length() >= minLength){
       done(QDialog::Accepted);
       emitText(line->text());
     } else {

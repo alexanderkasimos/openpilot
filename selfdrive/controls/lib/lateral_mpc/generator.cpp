@@ -1,8 +1,8 @@
+#include <math.h>
 #include <acado_code_generation.hpp>
 #include "common/modeldata.h"
 
-#define PI 3.1415926536
-#define deg2rad(d) (d/180.0*PI)
+#define deg2rad(d) (d/180.0*M_PI)
 
 const int N_steps = 16;
 using namespace std;
