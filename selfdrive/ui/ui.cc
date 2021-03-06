@@ -141,17 +141,17 @@ static void update_sockets(UIState *s) {
     scene.controls_state = sm["controlsState"].getControlsState();
 
     // TODO: the alert stuff shouldn't be handled here
-    scene.output_scale = scene.controls_state.getLateralControlState().getPidState().getOutput();
-    scene.angleSteersDes = scene.controls_state.getSteeringAngleDesiredDeg();
+    s->scene.output_scale = scene.controls_state.getLateralControlState().getPidState().getOutput();
+    s->scene.angleSteersDes = scene.controls_state.getSteeringAngleDesiredDeg();
   }
   if (sm.updated("radarState")) {
     auto radar_state = sm["radarState"].getRadarState();
     const auto line = sm["modelV2"].getModelV2().getPosition();
     update_lead(s, radar_state, line, 0);
     update_lead(s, radar_state, line, 1);
-    scene.lead_v_rel = scene.lead_data[0].getVRel();
-    scene.lead_d_rel = scene.lead_data[0].getDRel();
-    scene.lead_status = scene.lead_data[0].getStatus();
+    s->scene.lead_v_rel = s->scene.lead_data[0].getVRel();
+    s->scene.lead_d_rel = s->scene.lead_data[0].getDRel();
+    s->scene.lead_status = s->scene.lead_data[0].getStatus();
   }
   if (sm.updated("liveCalibration")) {
     scene.world_objects_visible = true;
@@ -180,7 +180,7 @@ static void update_sockets(UIState *s) {
   }
   if (sm.updated("deviceState")) {
     scene.deviceState = sm["deviceState"].getDeviceState();
-    scene.cpuTemp = scene.deviceState.getCpuTempC()[0];
+    s->scene.cpuTemp = scene.deviceState.getCpuTempC()[0];
   }
   if (sm.updated("pandaState")) {
     auto pandaState = sm["pandaState"].getPandaState();
@@ -195,8 +195,8 @@ static void update_sockets(UIState *s) {
       scene.satelliteCount = data.getMeasurementReport().getNumMeas();
     }
     auto data2 = sm["gpsLocationExternal"].getGpsLocationExternal();
-    scene.gpsAccuracyUblox = data2.getAccuracy();
-    scene.altitudeUblox = data2.getAltitude();
+    s->scene.gpsAccuracyUblox = data2.getAccuracy();
+    s->scene.altitudeUblox = data2.getAltitude();
   }
   if (sm.updated("liveLocationKalman")) {
     scene.gpsOK = sm["liveLocationKalman"].getLiveLocationKalman().getGpsOK();
@@ -217,16 +217,16 @@ static void update_sockets(UIState *s) {
   }
   if (sm.updated("carState")) {
     scene.car_state = sm["carState"].getCarState();
-    scene.brakeLights = scene.car_state.getBrakeLights();
-    scene.hvBpower = scene.car_state.getHvBpower();
-    scene.aEgo = scene.car_state.getAEgo();
-    scene.steeringTorqueEps = scene.car_state.getSteeringTorqueEps();
-    if(scene.leftBlinker != scene.car_state.getLeftBlinker() || scene.rightBlinker != scene.car_state.getRightBlinker()) {
-      scene.blinker_blinkingrate = 100;
+    s->scene.brakeLights = scene.car_state.getBrakeLights();
+    s->scene.hvBpower = scene.car_state.getHvBpower();
+    s->scene.aEgo = scene.car_state.getAEgo();
+    s->scene.steeringTorqueEps = scene.car_state.getSteeringTorqueEps();
+    if(s->scene.leftBlinker != scene.car_state.getLeftBlinker() || s->scene.rightBlinker != scene.car_state.getRightBlinker()) {
+      s->scene.blinker_blinkingrate = 100;
     }
-    scene.leftBlinker = scene.car_state.getLeftBlinker();
-    scene.rightBlinker = scene.car_state.getRightBlinker();
-    scene.angleSteers = scene.car_state.getSteeringAngleDeg();
+    s->scene.leftBlinker = scene.car_state.getLeftBlinker();
+    s->scene.rightBlinker = scene.car_state.getRightBlinker();
+    s->scene.angleSteers = scene.car_state.getSteeringAngleDeg();
   }
 
   if (sm.updated("sensorEvents")) {
